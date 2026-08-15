@@ -1,0 +1,1 @@
+Food Nest Davanagere offers a premium digital menu featuring artisanal Cocoa & Pista Tiramisu, fresh Rice Paper Dumplings, and signature Maska Buns. The interactive website features 3D visuals and cafe BGM, allowing customers to easily build pickup orders and submit them directly via WhatsApp.
