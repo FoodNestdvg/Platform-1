@@ -1,0 +1,3238 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Nest Davanagere | Good Food • Good Mood</title>
+  <meta name="description" content="Food Nest Davanagere — Cocoa & Pista Tiramisu, Rice Paper Dumplings, Maska Bun & BYOB. Order on WhatsApp for store takeaway & pickup with melodious cafe BGM ambience!">
+  
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="Food Nest Davanagere | Good Food • Good Mood">
+  <meta property="og:description" content="Experience Davanagere's finest food nest. Cocoa & Pista Tiramisu, Rice Paper Dumplings, Maska Bun & BYOB. Interactive 3D BGM experience.">
+  <meta property="og:image" content="assets/1000056703-removebg-preview.png">
+  <meta property="og:type" content="website">
+
+  <!-- Schema.org LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Food Nest Davanagere",
+    "image": "assets/1000056703-removebg-preview.png",
+    "email": "foodnestdvg@gmail.com",
+    "servesCuisine": ["Snacks", "Desserts", "Asian Fusion"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Davanagere",
+      "addressRegion": "Karnataka",
+      "addressCountry": "IN"
+    },
+    "telephone": "+917975215163",
+    "sameAs": [
+      "https://www.instagram.com/food_nest_davangere/"
+    ]
+  }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js & GSAP Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ==========================================
+       DESIGN SYSTEM & CSS VARIABLES
+       ========================================== */
+    :root {
+      --bg-dark: #0F0A07;
+      --bg-dark-card: #18110B;
+      --bg-cream: #FAF5EE;
+      --bg-parchment: #F2E7D8;
+      --text-main: #2A1A10;
+      --text-light: #F7EFE4;
+      --text-muted: #8E7A6C;
+      --text-gold: #D49A37;
+      --accent-gold: #D49A37;
+      --accent-amber: #E07A5F;
+      --accent-crimson: #7A1B28;
+      --accent-leaf: #3B5B2E;
+      --border-warm: rgba(212, 154, 55, 0.2);
+      --shadow-soft: 0 15px 35px rgba(15, 10, 7, 0.08);
+      --shadow-deep: 0 25px 50px rgba(0, 0, 0, 0.35);
+      --font-serif: 'Playfair Display', 'DM Serif Display', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-hand: 'Caveat', cursive;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+    }
+
+    body {
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Selection */
+    ::selection {
+      background: var(--accent-gold);
+      color: var(--bg-dark);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-gold);
+      border-radius: 4px;
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 16px;
+      height: 16px;
+      background-color: var(--accent-gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      mix-blend-mode: difference;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    .custom-cursor.active {
+      opacity: 1;
+    }
+
+    .custom-cursor.hover-link {
+      width: 48px;
+      height: 48px;
+      background-color: #fff;
+      mix-blend-mode: normal;
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+    }
+
+    .custom-cursor.hover-add {
+      width: 70px;
+      height: 70px;
+      background-color: var(--accent-gold);
+      mix-blend-mode: normal;
+      box-shadow: 0 0 25px rgba(212, 154, 55, 0.6);
+      text-align: center;
+    }
+
+    /* Grain Overlay */
+    .bg-grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Floating Navigation */
+    header.main-header {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 3rem);
+      max-width: 1280px;
+      z-index: 1000;
+      background: rgba(15, 10, 7, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-warm);
+      border-radius: 100px;
+      padding: 0.75rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    header.main-header.scrolled {
+      top: 0.75rem;
+      background: rgba(15, 10, 7, 0.92);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+    }
+
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 12px rgba(212, 154, 55, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .brand-logo-wrap:hover .brand-logo-img {
+      transform: scale(1.08) rotate(5deg);
+    }
+
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-title span.sub {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    nav.nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    nav.nav-links a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+      position: relative;
+    }
+
+    nav.nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent-gold);
+      transition: width 0.3s ease;
+    }
+
+    nav.nav-links a:hover {
+      color: var(--accent-gold);
+    }
+
+    nav.nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .pickup-badge-pill {
+      background: rgba(224, 122, 95, 0.15);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 0.4rem 0.85rem;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-icon-audio {
+      background: rgba(212, 154, 55, 0.15);
+      border: 1px solid var(--accent-gold);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .btn-icon-audio.playing {
+      background: var(--accent-gold);
+      color: var(--bg-dark);
+      box-shadow: 0 0 20px rgba(212, 154, 55, 0.7);
+      animation: bgmPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes bgmPulse {
+      0% { box-shadow: 0 0 0 0 rgba(212, 154, 55, 0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(212, 154, 55, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(212, 154, 55, 0); }
+    }
+
+
+    .btn-pickup-list-trigger {
+      position: relative;
+      background: linear-gradient(135deg, var(--accent-gold), #b37e25);
+      color: var(--bg-dark);
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(212, 154, 55, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-pickup-list-trigger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 154, 55, 0.5);
+    }
+
+    .cart-badge {
+      background: var(--bg-dark);
+      color: var(--accent-gold);
+      font-size: 0.75rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    /* STORY INDEX TRACKER */
+    .story-indexer {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .story-dot {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .story-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .story-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      transition: all 0.3s ease;
+    }
+
+    .story-dot:hover .story-label,
+    .story-dot.active .story-label {
+      opacity: 1;
+      transform: translateX(0);
+      color: var(--accent-gold);
+    }
+
+    .story-dot.active .story-indicator {
+      background: var(--accent-gold);
+      width: 12px;
+      height: 12px;
+      box-shadow: 0 0 10px var(--accent-gold);
+    }
+
+    /* ==========================================
+       HERO SECTION (3D CANVASES & CINEMATIC OVERLAY)
+       ========================================== */
+    section.hero-section {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 40%, #26160F 0%, #0F0A07 80%);
+    }
+
+    #hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 1.5rem;
+      pointer-events: none;
+    }
+
+    .hero-content * {
+      pointer-events: auto;
+    }
+
+    .hero-badge-wrap {
+      display: inline-block;
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-logo-badge {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      box-shadow: 0 0 40px rgba(212, 154, 55, 0.4), 0 0 80px rgba(224, 122, 95, 0.2);
+      border: 3px solid var(--accent-gold);
+      animation: floatBadge 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatBadge {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .hero-subtitle-top {
+      font-family: var(--font-hand);
+      font-size: 1.8rem;
+      color: var(--accent-gold);
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.9);
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(135deg, #FFF, var(--accent-gold), var(--accent-amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .pickup-banner-sub {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(224, 122, 95, 0.2);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 2.2rem auto;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold), #b37e25);
+      color: var(--bg-dark);
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 10px 30px rgba(212, 154, 55, 0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(212, 154, 55, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-light);
+      border: 1px solid rgba(255,255,255,0.2);
+      text-decoration: none;
+      padding: 1rem 2.2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: var(--text-light);
+      transform: translateY(-2px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .scroll-indicator svg {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+      60% { transform: translateY(-4px); }
+    }
+
+    /* ==========================================
+       SECTION 02: THE NEST (ATMOSPHERE & EDITORIAL)
+       ========================================== */
+    section.nest-section {
+      padding: 8rem 0;
+      background: var(--bg-dark-card);
+      position: relative;
+      border-top: 1px solid var(--border-warm);
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-number {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--accent-gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: 800;
+      color: var(--text-light);
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 1rem auto 0 auto;
+      line-height: 1.7;
+    }
+
+    .nest-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .nest-image-stack {
+      position: relative;
+      min-height: 480px;
+    }
+
+    .nest-img-card {
+      position: absolute;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-deep);
+      border: 1px solid var(--border-warm);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nest-img-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s ease;
+    }
+
+    .nest-img-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .nest-img-1 {
+      width: 80%;
+      height: 380px;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
+
+    .nest-img-2 {
+      width: 65%;
+      height: 320px;
+      bottom: -30px;
+      right: 0;
+      z-index: 3;
+      border: 4px solid var(--bg-dark-card);
+    }
+
+    .nest-info-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-warm);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      position: relative;
+    }
+
+    .nest-quote {
+      font-family: var(--font-hand);
+      font-size: 2.2rem;
+      color: var(--accent-gold);
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+    }
+
+    .nest-text {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+
+    .nest-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+
+    .highlight-icon {
+      background: rgba(212, 154, 55, 0.12);
+      color: var(--accent-gold);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .highlight-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .highlight-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================
+       SECTION 03 & 04: SIGNATURE BITES (3D SHOWCASE)
+       ========================================== */
+    section.signature-section {
+      padding: 8rem 0;
+      position: relative;
+      background: radial-gradient(ellipse at bottom, #251711 0%, #0F0A07 100%);
+      overflow: hidden;
+    }
+
+    .signature-stage-wrapper {
+      position: relative;
+      width: 100%;
+      margin-top: 3rem;
+    }
+
+    .signature-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .sig-tab-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      padding: 0.75rem 1.8rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .sig-tab-btn.active,
+    .sig-tab-btn:hover {
+      background: var(--accent-gold);
+      color: var(--bg-dark);
+      border-color: var(--accent-gold);
+      box-shadow: 0 6px 20px rgba(212, 154, 55, 0.4);
+    }
+
+    .signature-card-display {
+      background: rgba(24, 17, 11, 0.9);
+      border: 1px solid var(--border-warm);
+      border-radius: 32px;
+      padding: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      box-shadow: var(--shadow-deep);
+      position: relative;
+    }
+
+    .sig-image-holder {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      height: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      border: 2px solid var(--border-warm);
+    }
+
+    .sig-image-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sig-image-holder:hover img {
+      transform: scale(1.08);
+    }
+
+    .sig-badge-top {
+      position: absolute;
+      top: 1.25rem;
+      left: 1.25rem;
+      background: rgba(15, 10, 7, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--accent-gold);
+      border: 1px solid var(--border-warm);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .sig-content-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .sig-flavor-phase {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .flavor-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-amber);
+      background: rgba(224, 122, 95, 0.12);
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+    }
+
+    .sig-item-title {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--text-light);
+      margin-bottom: 0.75rem;
+      line-height: 1.15;
+    }
+
+    .sig-item-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.8rem;
+    }
+
+    .sig-price-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .sig-price {
+      font-family: var(--font-serif);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .sig-price span.unit {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================
+       SECTION 05: EDITORIAL MENU SYSTEM
+       ========================================== */
+    section.menu-section {
+      padding: 8rem 0;
+      background: var(--bg-cream);
+      color: var(--text-main);
+      position: relative;
+    }
+
+    section.menu-section .section-title {
+      color: var(--text-main);
+    }
+
+    section.menu-section .section-desc {
+      color: #6E5A4E;
+    }
+
+    .menu-filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: rgba(42, 26, 16, 0.05);
+      border: 1px solid rgba(42, 26, 16, 0.1);
+      color: var(--text-main);
+      padding: 0.75rem 1.6rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--text-main);
+      color: var(--bg-cream);
+      border-color: var(--text-main);
+      box-shadow: 0 6px 18px rgba(42, 26, 16, 0.2);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .menu-card {
+      background: #FFF;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(42, 26, 16, 0.08);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-10px) rotateX(3deg);
+      box-shadow: 0 25px 45px rgba(42, 26, 16, 0.15);
+      border-color: var(--accent-gold);
+    }
+
+    .menu-card-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      background: #F2E8DB;
+    }
+
+    .menu-card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .menu-card:hover .menu-card-img-wrap img {
+      transform: scale(1.08);
+    }
+
+    .menu-cat-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      color: var(--text-main);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .menu-card-body {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .menu-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+    }
+
+    .menu-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .menu-card-price {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--accent-crimson);
+      white-space: nowrap;
+    }
+
+    .menu-card-desc {
+      color: #6E5A4E;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .menu-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(42, 26, 16, 0.08);
+    }
+
+    .variant-pills {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .v-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #F4EBE0;
+      color: #5C473A;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .btn-add-item {
+      background: #25D366;
+      color: #000;
+      border: none;
+      padding: 0.65rem 1.3rem;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-add-item:hover {
+      background: #20bd5a;
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.5);
+    }
+
+    /* FULL MENU SHEET BANNER */
+    .menu-original-sheet-banner {
+      margin-top: 5rem;
+      background: linear-gradient(135deg, #2A1A10, #150C07);
+      border-radius: 28px;
+      padding: 3.5rem;
+      color: #FFF;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 3rem;
+      align-items: center;
+      box-shadow: var(--shadow-deep);
+    }
+
+    .sheet-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      border: 2px solid var(--border-warm);
+    }
+
+    .sheet-img-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* ==========================================
+       SECTION 06: BRAND MESSAGE KINETIC SCROLL
+       ========================================== */
+    section.brand-message-section {
+      padding: 10rem 0;
+      background: #0A0705;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kinetic-word-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .kinetic-word {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 0.9;
+      color: rgba(255,255,255,0.15);
+      transition: color 0.4s ease, transform 0.4s ease;
+    }
+
+    .kinetic-word.active {
+      color: var(--text-light);
+      text-shadow: 0 0 50px rgba(212, 154, 55, 0.4);
+      transform: scale(1.05);
+    }
+
+    .kinetic-word.gold {
+      color: var(--accent-gold);
+    }
+
+    .brand-hand-subtitle {
+      font-family: var(--font-hand);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      color: var(--accent-amber);
+      margin-top: 3rem;
+    }
+
+    /* ==========================================
+       SECTION 07: LOCAL IDENTITY & INSTAGRAM & FEEDBACK
+       ========================================== */
+    section.local-section {
+      padding: 8rem 0;
+      background: var(--bg-dark-card);
+      border-top: 1px solid var(--border-warm);
+    }
+
+    .local-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+
+    .local-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-warm);
+      border-radius: 28px;
+      padding: 3.5rem 3rem;
+      position: relative;
+    }
+
+    .pin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(212, 154, 55, 0.12);
+      color: var(--accent-gold);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+    }
+
+    .local-title {
+      font-family: var(--font-serif);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .local-text {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+
+    .contact-item i {
+      color: var(--accent-gold);
+    }
+
+    .contact-item a {
+      color: var(--accent-gold);
+      text-decoration: none;
+    }
+
+    .contact-item a:hover {
+      text-decoration: underline;
+    }
+
+    .insta-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .insta-img-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      height: 180px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .insta-img-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .insta-img-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .insta-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 10, 7, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: var(--accent-gold);
+    }
+
+    .insta-img-item:hover .insta-overlay {
+      opacity: 1;
+    }
+
+    /* FEEDBACK FORM SECTION */
+    .feedback-card {
+      margin-top: 4rem;
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(212, 154, 55, 0.08), rgba(24, 17, 11, 0.95));
+      border: 1px solid var(--border-warm);
+      border-radius: 32px;
+      padding: 3.5rem 3rem;
+    }
+
+    .feedback-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-light);
+      text-transform: uppercase;
+    }
+
+    .form-input, .form-textarea {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border-warm);
+      color: var(--text-light);
+      padding: 0.9rem 1.2rem;
+      border-radius: 12px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.25s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px rgba(212, 154, 55, 0.2);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    .star-rating-select {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .star-btn {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border-warm);
+      color: var(--text-muted);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.25s ease;
+    }
+
+    .star-btn.active, .star-btn:hover {
+      background: var(--accent-gold);
+      color: var(--bg-dark);
+      border-color: var(--accent-gold);
+    }
+
+    /* PICKUP BASKET DRAWER & MODAL */
+    .cart-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      background: var(--bg-dark-card);
+      border-left: 1px solid var(--border-warm);
+      z-index: 2001;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -15px 0 40px rgba(0,0,0,0.6);
+    }
+
+    .cart-drawer.open {
+      transform: translateX(0);
+    }
+
+    .cart-header {
+      padding: 1.8rem 2rem;
+      border-bottom: 1px solid var(--border-warm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-header-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-close-cart {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-light);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-close-cart:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .cart-items-body {
+      padding: 2rem;
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .cart-empty-state {
+      text-align: center;
+      margin: auto 0;
+      color: var(--text-muted);
+    }
+
+    .cart-empty-state i {
+      font-size: 3rem;
+      color: var(--accent-gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-warm);
+      padding: 0.85rem 1rem;
+      border-radius: 16px;
+    }
+
+    .cart-item-thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .cart-item-info {
+      flex-grow: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .cart-item-variant {
+      font-size: 0.78rem;
+      color: var(--accent-gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .cart-item-price {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .cart-qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,0,0,0.4);
+      padding: 0.2rem 0.5rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-qty {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .btn-qty:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .qty-num {
+      font-size: 0.85rem;
+      font-weight: 700;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .cart-footer {
+      padding: 2rem;
+      border-top: 1px solid var(--border-warm);
+      background: rgba(10, 7, 5, 0.95);
+    }
+
+    .pickup-info-notice {
+      background: rgba(212, 154, 55, 0.1);
+      border: 1px solid var(--border-warm);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: var(--accent-gold);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-summary-row .total-price {
+      color: var(--accent-gold);
+      font-size: 1.4rem;
+      font-family: var(--font-serif);
+    }
+
+    .btn-whatsapp-order {
+      width: 100%;
+      background: #25D366;
+      color: #000;
+      border: none;
+      padding: 1.1rem;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-whatsapp-order:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
+      background: #22c35e;
+    }
+
+    /* FOOD DETAIL MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      z-index: 2500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .food-modal-card {
+      background: var(--bg-dark-card);
+      border: 1px solid var(--border-warm);
+      border-radius: 32px;
+      max-width: 800px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: var(--shadow-deep);
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.open .food-modal-card {
+      transform: scale(1);
+    }
+
+    .modal-img-side {
+      height: 100%;
+      min-height: 380px;
+      position: relative;
+    }
+
+    .modal-img-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-info-side {
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .btn-close-modal {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #FFF;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    /* FOOTER */
+    footer.main-footer {
+      background: #080503;
+      padding: 5rem 0 3rem 0;
+      border-top: 1px solid var(--border-warm);
+      text-align: center;
+    }
+
+    .footer-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-brand-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-tagline {
+      font-family: var(--font-hand);
+      font-size: 1.8rem;
+      color: var(--accent-gold);
+      margin-bottom: 2rem;
+    }
+
+    .footer-email-link {
+      color: var(--accent-gold);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-email-link:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-gold);
+    }
+
+    .footer-bottom {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 2rem;
+    }
+
+    /* RESPONSIVE STYLES */
+    @media (max-width: 992px) {
+      header.main-header nav.nav-links {
+        display: none;
+      }
+      .nest-grid, .signature-card-display, .menu-original-sheet-banner, .local-grid, .food-modal-card, .feedback-form {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .story-indexer {
+        display: none;
+      }
+      .food-modal-card {
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-img-side {
+        height: 240px;
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 1.25rem;
+      }
+      .hero-title {
+        font-size: 2.8rem;
+      }
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+      .custom-cursor {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="customCursor"></div>
+
+  <!-- Subtle Grain Overlay -->
+  <div class="bg-grain"></div>
+
+  <!-- Story Indexer -->
+  <div class="story-indexer">
+    <a href="#hero" class="story-dot active" data-sec="hero"><span class="story-label">01 DISCOVER</span><span class="story-indicator"></span></a>
+    <a href="#the-nest" class="story-dot" data-sec="the-nest"><span class="story-label">02 THE NEST</span><span class="story-indicator"></span></a>
+    <a href="#signature" class="story-dot" data-sec="signature"><span class="story-label">03 SIGNATURE BITES</span><span class="story-indicator"></span></a>
+    <a href="#menu" class="story-dot" data-sec="menu"><span class="story-label">04 THE MENU</span><span class="story-indicator"></span></a>
+    <a href="#brand-message" class="story-dot" data-sec="brand-message"><span class="story-label">05 GOOD MOOD</span><span class="story-indicator"></span></a>
+    <a href="#local" class="story-dot" data-sec="local"><span class="story-label">06 DAVANAGERE</span><span class="story-indicator"></span></a>
+  </div>
+
+  <!-- Floating Navigation Header -->
+  <header class="main-header" id="mainHeader">
+    <a href="#hero" class="brand-logo-wrap">
+      <img src="assets/1000056703-removebg-preview.png" alt="Food Nest Logo" class="brand-logo-img">
+      <div class="brand-title">
+        FOOD NEST
+        <span class="sub">Davanagere</span>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#the-nest">The Nest</a>
+      <a href="#signature">Signature</a>
+      <a href="#menu">Menu</a>
+      <a href="#local">Location</a>
+      <a href="#feedback">Feedback</a>
+    </nav>
+
+    <div class="nav-actions">
+      <span class="pickup-badge-pill"><i data-lucide="map-pin"></i> STORE PICKUP ONLY</span>
+
+      <button class="btn-icon-audio" id="audioToggleBtn" title="Toggle Melodious Cafe BGM">
+        <i data-lucide="music"></i>
+      </button>
+
+      <button class="btn-pickup-list-trigger" id="openCartBtn">
+        <i data-lucide="shopping-bag"></i>
+        <span>PICKUP LIST</span>
+        <span class="cart-badge" id="cartCountBadge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section" id="hero">
+    <canvas id="hero-canvas"></canvas>
+    
+    <div class="hero-content">
+      <div class="hero-badge-wrap">
+        <img src="assets/1000056703-removebg-preview.png" alt="Food Nest Davanagere" class="hero-logo-badge">
+      </div>
+      <div class="hero-subtitle-top">Happiness Served Fresh!</div>
+      
+      <div class="pickup-banner-sub">
+        <i data-lucide="map-pin"></i> STORE PICKUP AT DAVANAGERE, KARNATAKA
+      </div>
+
+      <h1 class="hero-title">GOOD FOOD.<br><span class="highlight">GOOD MOOD.</span></h1>
+      <p class="hero-tagline">Made with love at Food Nest, Davanagere. Order via WhatsApp for store takeaway & pickup! Indulge in artisanal Cocoa & Pista Tiramisu, Rice Paper Dumplings, Maska Bun & BYOB (Build Your Own Bag).</p>
+
+      <div class="hero-cta-group">
+        <a href="#menu" class="btn-primary">
+          <span>EXPLORE MENU</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+        <a href="https://wa.me/917975215163?text=Hi%20Food%20Nest!%20I'd%20like%20to%20place%20a%20Takeaway%20Pickup%20Order%20at%20your%20Davanagere%20store." target="_blank" class="btn-secondary">
+          <i data-lucide="message-circle"></i>
+          <span>WHATSAPP PICKUP</span>
+        </a>
+      </div>
+    </div>
+
+    <a href="#the-nest" class="scroll-indicator">
+      <span>Scroll to explore</span>
+      <i data-lucide="chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- SECTION 02: THE NEST (STORE ATMOSPHERE) -->
+  <section class="nest-section" id="the-nest">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">02 / THE NEST</span>
+        <h2 class="section-title">A Little Place. A Lot Of Flavour.</h2>
+        <p class="section-desc">Your cozy neighbourhood food nest in Davanagere, Karnataka. Stop by our store for fresh takeaway & instant pickup.</p>
+      </div>
+
+      <div class="nest-grid">
+        <div class="nest-image-stack">
+          <div class="nest-img-card nest-img-1">
+            <img src="assets/IMG_20260808_164554.jpg" alt="Fresh Rice Paper Dumplings at Food Nest">
+          </div>
+          <div class="nest-img-card nest-img-2">
+            <img src="assets/IMG_20260809_000850.png" alt="Pista Tiramisu at Food Nest">
+          </div>
+        </div>
+
+        <div class="nest-info-box">
+          <div class="nest-quote">"Happiness is homemade & served fresh every single day."</div>
+          <p class="nest-text">At Food Nest, we combine traditional warm hospitality with modern culinary innovation. From crisp Asian-inspired rice paper dumplings to creamy Cocoa & Pista Italian tiramisu, rich chocolate Maska Buns, and loaded BYOB chips bags, we create food that lifts your mood.</p>
+
+          <div class="nest-highlights">
+            <div class="highlight-item">
+              <div class="highlight-icon"><i data-lucide="heart"></i></div>
+              <div>
+                <div class="highlight-title">Made With Love</div>
+                <div class="highlight-sub">Handcrafted recipes</div>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon"><i data-lucide="sparkles"></i></div>
+              <div>
+                <div class="highlight-title">Fresh Ingredients</div>
+                <div class="highlight-sub">Healthy & spicy fusion</div>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon"><i data-lucide="map-pin"></i></div>
+              <div>
+                <div class="highlight-title">Convenient Store Pickup</div>
+                <div class="highlight-sub">Davanagere Counter</div>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-icon"><i data-lucide="mail"></i></div>
+              <div>
+                <div class="highlight-title">Direct Email Contact</div>
+                <div class="highlight-sub">foodnestdvg@gmail.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 03 & 04: SIGNATURE BITES (3D SHOWCASE) -->
+  <section class="signature-section" id="signature">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">03 / SIGNATURE BITES</span>
+        <h2 class="section-title">Chef's Special Selections</h2>
+        <p class="section-desc">Experience the most loved creations from our Davanagere kitchen.</p>
+      </div>
+
+      <div class="signature-tabs">
+        <button class="sig-tab-btn active" data-index="0">01. Rice Paper Dumpling</button>
+        <button class="sig-tab-btn" data-index="1">02. Cocoa Tiramisu</button>
+        <button class="sig-tab-btn" data-index="2">03. Pista Tiramisu</button>
+        <button class="sig-tab-btn" data-index="3">04. Maska Bun</button>
+        <button class="sig-tab-btn" data-index="4">05. BYOB (Loaded Chips)</button>
+      </div>
+
+      <div class="signature-card-display" id="sigDisplayCard">
+        <div class="sig-image-holder">
+          <span class="sig-badge-top" id="sigBadge">Bestseller</span>
+          <img src="assets/IMG_20260808_164554.jpg" alt="Signature Dish" id="sigImage">
+        </div>
+
+        <div class="sig-content-side">
+          <div class="sig-flavor-phase">
+            <span class="flavor-tag">FOOD</span>
+            <span class="flavor-tag">TEXTURE</span>
+            <span class="flavor-tag">FLAVOUR</span>
+            <span class="flavor-tag">HAPPINESS</span>
+          </div>
+          <h3 class="sig-item-title" id="sigTitle">Rice Paper Dumpling</h3>
+          <p class="sig-item-desc" id="sigDesc">Crispy, chewy & loaded with delicious fillings & signature dipping sauces. Perfect for a fresh, spicy, and healthy bite.</p>
+          
+          <div class="sig-price-bar">
+            <div class="sig-price" id="sigPrice">₹65 <span class="unit">/ portion</span></div>
+          </div>
+
+          <button class="btn-primary" id="sigAddBtn">
+            <i data-lucide="message-circle"></i>
+            <span>PRE-ORDER FOR PICKUP</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 05: EDITORIAL MENU -->
+  <section class="menu-section" id="menu">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-number">04 / THE MENU</span>
+        <h2 class="section-title">Explore Our Full Menu</h2>
+        <p class="section-desc">Handcrafted items made fresh for counter pickup. Select a category below.</p>
+      </div>
+
+      <div class="menu-filter-bar">
+        <button class="filter-btn active" data-cat="ALL">All Items</button>
+        <button class="filter-btn" data-cat="DUMPLINGS">Dumplings</button>
+        <button class="filter-btn" data-cat="DESSERTS">Tiramisu Desserts</button>
+        <button class="filter-btn" data-cat="BUNS & BITES">Buns & Bites</button>
+        <button class="filter-btn" data-cat="BYOB">BYOB (Chips)</button>
+      </div>
+
+      <div class="menu-grid" id="menuGrid">
+        <!-- Dynamic Menu Cards Injected via JS -->
+      </div>
+
+      <!-- ORIGINAL MENU SHEET BANNER -->
+      <div class="menu-original-sheet-banner">
+        <div>
+          <span class="pin-badge"><i data-lucide="file-text"></i> Official Menu Card</span>
+          <h3 style="font-family: var(--font-serif); font-size: 2.2rem; margin-bottom: 1rem;">Direct From Food Nest Counter</h3>
+          <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem;">Authentic menu pricing and items as presented at our store in Davanagere, Karnataka.</p>
+          <a href="assets/menu.jpg" target="_blank" class="btn-secondary">
+            <i data-lucide="maximize-2"></i>
+            <span>VIEW FULL MENU SHEET</span>
+          </a>
+        </div>
+        <div class="sheet-img-wrap">
+          <img src="assets/menu.jpg" alt="Official Food Nest Menu Sheet">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 06: BRAND MESSAGE KINETIC SCROLL -->
+  <section class="brand-message-section" id="brand-message">
+    <div class="container">
+      <div class="kinetic-word-wrap">
+        <div class="kinetic-word active">GOOD</div>
+        <div class="kinetic-word gold active">FOOD</div>
+        <div class="kinetic-word active">GOOD</div>
+        <div class="kinetic-word gold active">MOOD</div>
+      </div>
+      <div class="brand-hand-subtitle">— Made With Love at Food Nest —</div>
+    </div>
+  </section>
+
+  <!-- SECTION 07: DAVANAGERE LOCAL IDENTITY & INSTAGRAM & FEEDBACK FORM -->
+  <section class="local-section" id="local">
+    <div class="container">
+      <div class="local-grid">
+        <div class="local-card">
+          <span class="pin-badge"><i data-lucide="map-pin"></i> Store Location</span>
+          <h2 class="local-title">Davanagere, Karnataka</h2>
+          <p class="local-text">Visit our physical store to pick up your order fresh! We do not offer delivery, but customers can pre-order on WhatsApp and collect their food directly at our Davanagere counter.</p>
+          
+          <div class="contact-info-list">
+            <div class="contact-item">
+              <i data-lucide="map-pin"></i>
+              <span>Food Nest, Davanagere, Karnataka</span>
+            </div>
+            <div class="contact-item">
+              <i data-lucide="phone"></i>
+              <a href="tel:+917975215163">+91 79752 15163</a>
+            </div>
+            <div class="contact-item">
+              <i data-lucide="mail"></i>
+              <a href="mailto:foodnestdvg@gmail.com">foodnestdvg@gmail.com</a>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=14.4484828,75.9113729" target="_blank" class="btn-primary">
+              <i data-lucide="navigation"></i>
+              <span>GET STORE MAPS LOCATION</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="local-card">
+          <span class="pin-badge" style="background: rgba(225, 48, 108, 0.15); color: #E1306C;"><i data-lucide="instagram"></i> @food_nest_davangere</span>
+          <h2 class="local-title">Follow The Nest</h2>
+          <p class="local-text">Join our Instagram community for daily food posts, new item reveals, and customer stories.</p>
+
+          <div class="insta-gallery-grid">
+            <div class="insta-img-item">
+              <img src="assets/1000060089.png" alt="Cocoa Tiramisu at Food Nest">
+              <a href="https://www.instagram.com/food_nest_davangere/" target="_blank" class="insta-overlay"><i data-lucide="instagram"></i></a>
+            </div>
+            <div class="insta-img-item">
+              <img src="assets/IMG_20260809_000850.png" alt="Pista Tiramisu at Food Nest">
+              <a href="https://www.instagram.com/food_nest_davangere/" target="_blank" class="insta-overlay"><i data-lucide="instagram"></i></a>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; text-align: center;">
+            <a href="https://www.instagram.com/food_nest_davangere/" target="_blank" class="btn-secondary" style="width: 100%; justify-content: center;">
+              <i data-lucide="external-link"></i>
+              <span>VISIT INSTAGRAM PROFILE</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- CUSTOMER FEEDBACK FORM -->
+        <div class="feedback-card" id="feedback">
+          <span class="pin-badge" style="background: rgba(212, 154, 55, 0.15); color: var(--accent-gold);">
+            <i data-lucide="message-square"></i> Share Your Thoughts
+          </span>
+          <h2 class="local-title">Feedback For The Nest</h2>
+          <p class="local-text" style="margin-bottom: 1rem;">We love hearing from our guests! Submit your feedback directly to our team via WhatsApp.</p>
+
+          <form class="feedback-form" id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="fbName">Your Name</label>
+              <input type="text" id="fbName" class="form-input" placeholder="e.g. Rahul Kumar" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Your Rating</label>
+              <div class="star-rating-select" id="starRatingSelect">
+                <button type="button" class="star-btn active" data-rating="5">5★</button>
+                <button type="button" class="star-btn" data-rating="4">4★</button>
+                <button type="button" class="star-btn" data-rating="3">3★</button>
+                <button type="button" class="star-btn" data-rating="2">2★</button>
+                <button type="button" class="star-btn" data-rating="1">1★</button>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label" for="fbComments">Your Experience & Feedback</label>
+              <textarea id="fbComments" class="form-textarea" placeholder="Tell us what you loved about our Dumplings, Tiramisu, or Maska Buns!" required></textarea>
+            </div>
+
+            <div class="form-group full-width" style="margin-top: 1rem;">
+              <button type="submit" class="btn-primary" style="justify-content: center;">
+                <i data-lucide="send"></i>
+                <span>SUBMIT FEEDBACK ON WHATSAPP</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PICKUP BASKET DRAWER -->
+  <div class="cart-drawer-overlay" id="cartOverlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <div class="cart-header-title">
+        <i data-lucide="shopping-bag" style="color: var(--accent-gold);"></i>
+        <span>YOUR PICKUP LIST</span>
+      </div>
+      <button class="btn-close-cart" id="closeCartBtn"><i data-lucide="x"></i></button>
+    </div>
+
+    <div class="cart-items-body" id="cartItemsContainer">
+      <!-- Injected via JS -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="pickup-info-notice">
+        <i data-lucide="info"></i>
+        <span>Pre-order on WhatsApp & pick up at Davanagere Store</span>
+      </div>
+
+      <div class="cart-summary-row">
+        <span>Total Amount</span>
+        <span class="total-price" id="cartTotalPrice">₹0</span>
+      </div>
+
+      <button class="btn-whatsapp-order" id="whatsappOrderBtn">
+        <i data-lucide="message-square"></i>
+        <span>SEND PICKUP ORDER TO WHATSAPP</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ITEM DETAIL MODAL -->
+  <div class="modal-overlay" id="foodModal">
+    <div class="food-modal-card">
+      <button class="btn-close-modal" id="closeModalBtn"><i data-lucide="x"></i></button>
+      <div class="modal-img-side">
+        <img src="" alt="" id="modalImg">
+      </div>
+      <div class="modal-info-side">
+        <span class="flavor-tag" id="modalCat" style="align-self: flex-start; margin-bottom: 0.5rem;">CATEGORY</span>
+        <h3 style="font-family: var(--font-serif); font-size: 2rem; color: var(--text-light); margin-bottom: 0.5rem;" id="modalTitle">Dish Name</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;" id="modalDesc">Dish description goes here.</p>
+        
+        <div id="modalVariantSelector" style="margin-bottom: 1.5rem;">
+          <!-- Injected options if applicable -->
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+          <div style="font-family: var(--font-serif); font-size: 2rem; font-weight: 800; color: var(--accent-gold);" id="modalPrice">₹0</div>
+          <div class="cart-qty-ctrl">
+            <button class="btn-qty" id="modalQtyMinus">-</button>
+            <span class="qty-num" id="modalQtyVal">1</span>
+            <button class="btn-qty" id="modalQtyPlus">+</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="modalAddToCartBtn" style="width: 100%; justify-content: center;">
+          <i data-lucide="plus"></i>
+          <span>ADD TO PICKUP LIST</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="container">
+      <img src="assets/1000056703-removebg-preview.png" alt="Food Nest Logo" class="footer-logo">
+      <div class="footer-brand-title">FOOD NEST</div>
+      <div class="footer-tagline">Good Food • Good Mood — Made With Love</div>
+      
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">
+        📍 Store Pickup Only at Davanagere, Karnataka
+      </p>
+
+      <a href="mailto:foodnestdvg@gmail.com" class="footer-email-link">
+        <i data-lucide="mail"></i> foodnestdvg@gmail.com
+      </a>
+
+      <div class="footer-links" style="margin-top: 1rem;">
+        <a href="#hero">Home</a>
+        <a href="#the-nest">The Nest</a>
+        <a href="#signature">Signature</a>
+        <a href="#menu">Menu</a>
+        <a href="#local">Location</a>
+        <a href="#feedback">Feedback</a>
+        <a href="https://www.instagram.com/food_nest_davangere/" target="_blank">Instagram</a>
+      </div>
+
+      <div class="footer-bottom">
+        © 2026 Food Nest Davanagere, Karnataka. All rights reserved. Designed with 3D Excellence.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       APPLICATION JAVASCRIPT LOGIC
+       ========================================== -->
+  <script>
+    // --- 1. REVISED FOOD NEST DATABASE ---
+    const FOOD_DATABASE = [
+      {
+        id: 'dumplings-reg',
+        title: 'Rice Paper Dumpling',
+        category: 'DUMPLINGS',
+        price: 65,
+        desc: 'Crispy, chewy & loaded with delicious fillings & signature dipping sauces.',
+        image: 'assets/IMG_20260808_164554.jpg',
+        bestseller: true,
+        variants: [{ name: 'Standard Portion', price: 65 }]
+      },
+      {
+        id: 'tiramisu-cocoa',
+        title: 'Cocoa Tiramisu Dessert Cup',
+        category: 'DESSERTS',
+        price: 150,
+        desc: 'Classic Italian cocoa delight with a creamy mascarpone twist & coffee espresso sponge.',
+        image: 'assets/1000060089.png',
+        bestseller: true,
+        variants: [{ name: 'Cocoa Flavour', price: 150 }]
+      },
+      {
+        id: 'tiramisu-pista',
+        title: 'Pista Tiramisu Dessert Cup',
+        category: 'DESSERTS',
+        price: 180,
+        desc: 'Rich pistachio tiramisu layered with premium roasted pistachios & velvety cream.',
+        image: 'assets/IMG_20260809_000850.png',
+        bestseller: true,
+        variants: [{ name: 'Pista Flavour', price: 180 }]
+      },
+      {
+        id: 'maska-bun',
+        title: 'Maska Bun',
+        category: 'BUNS & BITES',
+        price: 45,
+        desc: 'Soft toasted bun drizzled with velvety chocolate syrup and rich cocoa spread.',
+        image: 'assets/IMG_20260809_000712.png',
+        bestseller: true,
+        variants: [
+          { name: 'Chocolate Flavour', price: 45 },
+          { name: 'Gulkand Flavour', price: 50 }
+        ]
+      },
+      {
+        id: 'byob-chips',
+        title: 'BYOB (Build Your Own Bag)',
+        category: 'BYOB',
+        price: 30,
+        desc: 'Loaded Doritos / chips bag stuffed with fresh veggies, diced tomatoes, melted cheese blend & signature Food Nest sauces.',
+        image: 'assets/IMG_20260809_000745.png',
+        bestseller: true,
+        variants: [{ name: 'Loaded Chips Bag', price: 30 }]
+      }
+    ];
+
+    // --- 2. STATE MANAGEMENT & WEB AUDIO SYNTHESIZER ---
+    let cart = [];
+    let currentFeedbackRating = 5;
+    let bgmAutoStarted = false;
+
+    // =====================================================
+    // --- 3. PREMIUM CAFE BGM SYNTHESIZER (WEB AUDIO API)
+    //   Layers: warm bass | detuned jazz pad | melody | noise percussion
+    //   Chord progression: Cmaj9 → Am9 → Fmaj9 → G7sus4
+    // =====================================================
+    class CafeBGM {
+      constructor() {
+        this.ctx         = null;
+        this.masterGain  = null;
+        this.reverbNode  = null;
+        this.isPlaying   = false;
+        this.timers      = [];
+        this.beat        = 0;  // 16th-note step counter
+        this.BPM         = 72; // slow, relaxed cafe tempo
+
+        // Each chord: [root, 3rd, 5th, 7th, 9th] in Hz — lower octave for pads
+        this.CHORDS = [
+          { bass: 65.41,  pad: [130.81, 164.81, 196.00, 246.94, 293.66] }, // Cmaj9
+          { bass: 55.00,  pad: [110.00, 130.81, 164.81, 220.00, 261.63] }, // Am9
+          { bass: 87.31,  pad: [174.61, 220.00, 261.63, 329.63, 392.00] }, // Fmaj9
+          { bass: 98.00,  pad: [196.00, 246.94, 293.66, 349.23, 440.00] }, // G7sus4
+        ];
+        this.chordIdx = 0;
+
+        // Pentatonic major melody scale in C — for the lead line
+        this.MELODY_C = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+        // Pentatonic major melody scale in A minor — for variety
+        this.MELODY_AM = [440.00, 493.88, 523.25, 587.33, 659.25, 784.00];
+
+        // Melodic phrases (interval indices into scale, length = 8 steps @ BPM/2)
+        this.PHRASES = [
+          [0, 2, 4, 3, 2, 0, -1, -1],
+          [2, 3, 4, 5, 4, 3, 2, -1],
+          [4, 3, 2, 0, 2, 3, 4, -1],
+          [-1, 0, 2, 4, 3, 2, 0, -1],
+          [5, 4, 3, 2, 0, -1, -1, -1],
+        ];
+        this.phraseIdx = 0;
+      }
+
+      // ---- Core init: create AudioContext + global FX chain ----
+      init() {
+        if (this.ctx) return;
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Soft reverb via convolver trick using AudioBuffer
+        this.reverbNode = this._buildReverb(this.ctx, 2.8, 0.5);
+        this.reverbNode.connect(this.ctx.destination);
+
+        // Dry master chain
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+        this.masterGain.connect(this.ctx.destination);
+        this.masterGain.connect(this.reverbNode); // also send to reverb
+      }
+
+      // ---- Build a synthetic reverb buffer ----
+      _buildReverb(ctx, duration, decay) {
+        const sampleRate = ctx.sampleRate;
+        const length     = sampleRate * duration;
+        const impulse    = ctx.createBuffer(2, length, sampleRate);
+        const reverbGain = ctx.createGain();
+        reverbGain.gain.setValueAtTime(0.18, ctx.currentTime);
+        for (let c = 0; c < 2; c++) {
+          const ch = impulse.getChannelData(c);
+          for (let i = 0; i < length; i++) {
+            ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+          }
+        }
+        const conv = ctx.createConvolver();
+        conv.buffer = impulse;
+        conv.connect(reverbGain);
+        return reverbGain;
+      }
+
+      // ---- Helpers ----
+      get _stepMs() { return (60 / this.BPM / 2) * 1000; } // 1/8 note in ms
+
+      _osc(type, freq, detuneHz = 0) {
+        const o = this.ctx.createOscillator();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        if (detuneHz) o.detune.setValueAtTime(detuneHz, this.ctx.currentTime);
+        return o;
+      }
+
+      _lpFilter(freq, Q = 1) {
+        const f = this.ctx.createBiquadFilter();
+        f.type = 'lowpass';
+        f.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        f.Q.setValueAtTime(Q, this.ctx.currentTime);
+        return f;
+      }
+
+      // ---- Bass layer: sine + sub-octave, soft pluck envelope ----
+      _playBass(rootHz, duration) {
+        if (!this.isPlaying) return;
+        const now = this.ctx.currentTime;
+
+        [rootHz, rootHz * 0.5].forEach((freq, i) => {
+          const o   = this._osc('sine', freq);
+          const g   = this.ctx.createGain();
+          const vol = i === 0 ? 0.22 : 0.10;
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.linearRampToValueAtTime(vol, now + 0.04);
+          g.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.95);
+          o.connect(g);
+          g.connect(this.masterGain);
+          o.start(now);
+          o.stop(now + duration);
+        });
+      }
+
+      // ---- Warm pad layer: 4 oscillators per note, slightly detuned (chorus effect) ----
+      _playPad(freqs, duration) {
+        if (!this.isPlaying) return;
+        const now = this.ctx.currentTime;
+        const filt = this._lpFilter(900, 0.8);
+        filt.connect(this.masterGain);
+
+        freqs.forEach(freq => {
+          // Two slightly detuned sines per note for warmth
+          [-6, 0, 6].forEach(detuneCents => {
+            const o = this._osc('sine', freq, detuneCents);
+            const g = this.ctx.createGain();
+            g.gain.setValueAtTime(0.001, now);
+            g.gain.linearRampToValueAtTime(0.018, now + 0.9);
+            g.gain.setValueAtTime(0.018, now + duration - 0.8);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration - 0.1);
+            o.connect(g);
+            g.connect(filt);
+            o.start(now);
+            o.stop(now + duration);
+          });
+
+          // Subtle triangle for harmonic brightness
+          const tri = this._osc('triangle', freq * 2);
+          const tg  = this.ctx.createGain();
+          tg.gain.setValueAtTime(0.001, now);
+          tg.gain.linearRampToValueAtTime(0.006, now + 0.5);
+          tg.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.7);
+          tri.connect(tg);
+          tg.connect(filt);
+          tri.start(now);
+          tri.stop(now + duration);
+        });
+      }
+
+      // ---- Melodic note: triangle wave, soft + breathy ----
+      _playNote(freq, dur) {
+        if (!this.isPlaying || !freq) return;
+        const now  = this.ctx.currentTime;
+        const filt = this._lpFilter(2200, 1.2);
+        filt.connect(this.masterGain);
+
+        const o = this._osc('triangle', freq, 4);
+        const g = this.ctx.createGain();
+        g.gain.setValueAtTime(0.001, now);
+        g.gain.linearRampToValueAtTime(0.045, now + 0.08);
+        g.gain.setValueAtTime(0.045, now + dur * 0.5);
+        g.gain.exponentialRampToValueAtTime(0.001, now + dur - 0.05);
+        o.connect(g);
+        g.connect(filt);
+        o.start(now);
+        o.stop(now + dur);
+      }
+
+      // ---- Soft hi-hat noise: filtered white noise burst ----
+      _playHat(vol = 0.04) {
+        if (!this.isPlaying) return;
+        const now    = this.ctx.currentTime;
+        const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.08, this.ctx.sampleRate);
+        const data   = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+        const src  = this.ctx.createBufferSource();
+        src.buffer = buffer;
+        const filt = this._lpFilter(8000, 0.5);
+        const hp   = this.ctx.createBiquadFilter();
+        hp.type = 'highpass';
+        hp.frequency.setValueAtTime(6000, now);
+        const g = this.ctx.createGain();
+        g.gain.setValueAtTime(vol, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        src.connect(filt);
+        filt.connect(hp);
+        hp.connect(g);
+        g.connect(this.masterGain);
+        src.start(now);
+      }
+
+      // ---- Main scheduler loop (runs every 1/8 note step) ----
+      _schedule() {
+        if (!this.isPlaying) return;
+        const step    = this.beat;
+        const barStep = step % 16; // 16 eighth-note steps = 2 bars
+        const chordDur= (60 / this.BPM) * 8; // 4 bars per chord
+
+        // On new chord boundary (every 16 steps = 2 bars)
+        if (barStep === 0) {
+          const chord = this.CHORDS[this.chordIdx];
+          this._playBass(chord.bass, chordDur * 0.9);
+          this._playPad(chord.pad, chordDur - 0.1);
+          if (step % 32 === 0) this.chordIdx = (this.chordIdx + 1) % this.CHORDS.length;
+        }
+
+        // Melody: fires every 2 steps (quarter note)
+        if (barStep % 2 === 0) {
+          const phrase    = this.PHRASES[this.phraseIdx];
+          const noteIdx   = (barStep / 2) % phrase.length;
+          const scaleIdx  = phrase[noteIdx];
+          if (scaleIdx >= 0) {
+            const scale = this.chordIdx <= 1 ? this.MELODY_C : this.MELODY_AM;
+            const freq  = scale[Math.min(scaleIdx, scale.length - 1)];
+            this._playNote(freq, (60 / this.BPM) * 1.8);
+          }
+        }
+
+        // Hi-hat: on beats 1 and 3 (steps 0 and 8), lighter on off-beats
+        if (barStep % 4 === 0)      this._playHat(0.035);
+        else if (barStep % 2 === 0) this._playHat(0.012);
+
+        // Advance phrase on each new 2-bar phrase
+        if (step % 16 === 15) {
+          this.phraseIdx = (this.phraseIdx + 1) % this.PHRASES.length;
+        }
+
+        this.beat++;
+        const tid = setTimeout(() => this._schedule(), this._stepMs);
+        this.timers.push(tid);
+      }
+
+      // ---- Public API ----
+      start() {
+        this.init();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        if (this.isPlaying) return;
+        this.isPlaying = true;
+        this.beat = 0;
+        // Fade master in smoothly
+        this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.masterGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+        this.masterGain.gain.linearRampToValueAtTime(0.72, this.ctx.currentTime + 2.5);
+        this._schedule();
+      }
+
+      stop() {
+        if (!this.isPlaying) return;
+        this.isPlaying = false;
+        this.timers.forEach(t => clearTimeout(t));
+        this.timers = [];
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
+          this.masterGain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.8);
+        }
+      }
+    }
+
+    const bgm = new CafeBGM();
+
+    // Micro Sound Feedback
+    function playClickSound(freq = 600) {
+      if (!bgm.ctx) bgm.init();
+      try {
+        const osc = bgm.ctx.createOscillator();
+        const gain = bgm.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, bgm.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq / 2, bgm.ctx.currentTime + 0.05);
+
+        gain.gain.setValueAtTime(0.12, bgm.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, bgm.ctx.currentTime + 0.05);
+
+        osc.connect(gain);
+        gain.connect(bgm.ctx.destination);
+        osc.start();
+        osc.stop(bgm.ctx.currentTime + 0.05);
+      } catch (e) {}
+    }
+
+    // --- 4. THREE.JS 3D HERO CANVAS SCENE ---
+    function initThreeHero() {
+      const canvas = document.getElementById('hero-canvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 15;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xfff5ea, 1.2);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xd49a37, 2);
+      dirLight.position.set(10, 15, 10);
+      scene.add(dirLight);
+
+      const pointLight = new THREE.PointLight(0xe07a5f, 1.5, 20);
+      pointLight.position.set(-8, -5, 5);
+      scene.add(pointLight);
+
+      // Create Floating 3D Food Planes with Textures
+      const textureLoader = new THREE.TextureLoader();
+
+      const createFoodMesh = (texPath, x, y, z, rotX, rotY, scale = 3) => {
+        const geo = new THREE.PlaneGeometry(scale, scale * 0.85);
+        const mat = new THREE.MeshStandardMaterial({
+          map: textureLoader.load(texPath),
+          transparent: true,
+          side: THREE.DoubleSide,
+          roughness: 0.3,
+          metalness: 0.1
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z);
+        mesh.rotation.set(rotX, rotY, 0);
+        scene.add(mesh);
+        return mesh;
+      };
+
+      const mesh1 = createFoodMesh('assets/IMG_20260808_164554.jpg', -6, 2, 2, 0.2, 0.3, 4.2);
+      const mesh2 = createFoodMesh('assets/IMG_20260809_000850.png', 6, -1.5, 1, -0.1, -0.4, 4);
+
+      // Golden Dust Particles
+      const particleCount = 120;
+      const particleGeo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(particleCount * 3);
+
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        posArray[i] = (Math.random() - 0.5) * 30;
+        posArray[i + 1] = (Math.random() - 0.5) * 30;
+        posArray[i + 2] = (Math.random() - 0.5) * 20;
+      }
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        size: 0.12,
+        color: 0xd49a37,
+        transparent: true,
+        opacity: 0.6
+      });
+      const particleSystem = new THREE.Points(particleGeo, particleMat);
+      scene.add(particleSystem);
+
+      // Mouse Parallax & Animation Loop
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      let clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+
+        // Mesh gentle float
+        mesh1.position.y = 2 + Math.sin(elapsedTime * 0.8) * 0.3;
+        mesh1.rotation.y = 0.3 + Math.sin(elapsedTime * 0.5) * 0.1;
+
+        mesh2.position.y = -1.5 + Math.cos(elapsedTime * 0.9) * 0.25;
+        mesh2.rotation.y = -0.4 + Math.cos(elapsedTime * 0.6) * 0.1;
+
+        particleSystem.rotation.y = elapsedTime * 0.03;
+
+        // Mouse Parallax easing
+        camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
+        camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Window Resize Listener
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    // --- 5. RENDER MENU CARDS ---
+    function renderMenu(category = 'ALL') {
+      const grid = document.getElementById('menuGrid');
+      grid.innerHTML = '';
+
+      const filtered = category === 'ALL' ? FOOD_DATABASE : FOOD_DATABASE.filter(item => item.category === category);
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'menu-card';
+        card.dataset.id = item.id;
+
+        card.innerHTML = `
+          <div class="menu-card-img-wrap">
+            <img src="${item.image}" alt="${item.title}">
+            <span class="menu-cat-badge">${item.category}</span>
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-header">
+              <h3 class="menu-card-title">${item.title}</h3>
+              <div class="menu-card-price">₹${item.price}</div>
+            </div>
+            <p class="menu-card-desc">${item.desc}</p>
+            <div class="menu-card-footer">
+              <div class="variant-pills">
+                ${item.variants.map(v => `<span class="v-pill">${v.name}</span>`).join('')}
+              </div>
+              <button class="btn-add-item" onclick="event.stopPropagation(); quickAddToCart('${item.id}')">
+                <i data-lucide="message-square"></i>
+                <span>PICKUP</span>
+              </button>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => openFoodModal(item.id));
+        grid.appendChild(card);
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // --- 6. SIGNATURE BITES INTERACTIVE STAGE ---
+    const SIG_ITEMS = [
+      {
+        title: 'Rice Paper Dumpling',
+        desc: 'Crispy, chewy & loaded with delicious fillings & signature dipping sauces. Crafted fresh.',
+        price: '₹65',
+        badge: 'Bestseller',
+        img: 'assets/IMG_20260808_164554.jpg'
+      },
+      {
+        title: 'Cocoa Tiramisu Dessert Cup',
+        desc: 'Classic Italian cocoa delight with espresso sponge & mascarpone cream.',
+        price: '₹150',
+        badge: 'Classic Cocoa',
+        img: 'assets/1000060089.png'
+      },
+      {
+        title: 'Pista Tiramisu Dessert Cup',
+        desc: 'Rich pistachio tiramisu layered with roasted pistachios & velvety cream.',
+        price: '₹180',
+        badge: 'Nutty Luxury',
+        img: 'assets/IMG_20260809_000850.png'
+      },
+      {
+        title: 'Chocolate Maska Bun Delight',
+        desc: 'Soft toasted bun lavishly drizzled with chocolate syrup and rich cocoa spread.',
+        price: '₹45 - ₹50',
+        badge: 'Chef Special',
+        img: 'assets/IMG_20260809_000712.png'
+      },
+      {
+        title: 'BYOB (Build Your Own Bag)',
+        desc: 'Loaded crispy Doritos chips bag stuffed with fresh salad, cheese sauce & secret house seasoning.',
+        price: '₹30',
+        badge: 'Crowd Favorite',
+        img: 'assets/IMG_20260809_000745.png'
+      }
+    ];
+
+    function setupSignatureTabs() {
+      const tabs = document.querySelectorAll('.sig-tab-btn');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          playClickSound(700);
+          tabs.forEach(t => t.classList.remove('active'));
+          e.target.classList.add('active');
+
+          const idx = parseInt(e.target.dataset.index);
+          const data = SIG_ITEMS[idx];
+
+          const card = document.getElementById('sigDisplayCard');
+          gsap.to(card, { opacity: 0, y: 15, duration: 0.25, onComplete: () => {
+            document.getElementById('sigTitle').innerText = data.title;
+            document.getElementById('sigDesc').innerText = data.desc;
+            document.getElementById('sigPrice').innerHTML = `${data.price} <span class="unit">/ portion</span>`;
+            document.getElementById('sigBadge').innerText = data.badge;
+            document.getElementById('sigImage').src = data.img;
+
+            gsap.to(card, { opacity: 1, y: 0, duration: 0.35 });
+          }});
+        });
+      });
+    }
+
+    // --- 7. PICKUP LIST SYSTEM & WHATSAPP GENERATOR ---
+    function updateCartUI() {
+      const container = document.getElementById('cartItemsContainer');
+      const badge = document.getElementById('cartCountBadge');
+      const totalEl = document.getElementById('cartTotalPrice');
+
+      const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+      const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+      badge.innerText = totalItems;
+      totalEl.innerText = `₹${totalPrice}`;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="cart-empty-state">
+            <i data-lucide="shopping-bag"></i>
+            <p>Your pickup list is empty.<br>Select items from our menu to pre-order for store takeaway!</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = cart.map((item, index) => `
+        <div class="cart-item-row">
+          <img src="${item.image}" alt="${item.title}" class="cart-item-thumb">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.title}</div>
+            <div class="cart-item-variant">${item.variant}</div>
+            <div class="cart-item-price">₹${item.price * item.qty}</div>
+          </div>
+          <div class="cart-qty-ctrl">
+            <button class="btn-qty" onclick="changeCartQty(${index}, -1)">-</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="btn-qty" onclick="changeCartQty(${index}, 1)">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function quickAddToCart(itemId) {
+      playClickSound(800);
+      const food = FOOD_DATABASE.find(f => f.id === itemId);
+      if (!food) return;
+
+      const variant = food.variants[0];
+      const existingIndex = cart.findIndex(c => c.id === food.id && c.variant === variant.name);
+
+      if (existingIndex > -1) {
+        cart[existingIndex].qty += 1;
+      } else {
+        cart.push({
+          id: food.id,
+          title: food.title,
+          price: variant.price,
+          variant: variant.name,
+          image: food.image,
+          qty: 1
+        });
+      }
+
+      updateCartUI();
+
+      if (window.confetti) {
+        confetti({
+          particleCount: 25,
+          spread: 50,
+          origin: { y: 0.9 }
+        });
+      }
+
+      toggleCart(true);
+    }
+
+    function changeCartQty(index, delta) {
+      playClickSound(600);
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      updateCartUI();
+    }
+
+    function toggleCart(open) {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('cartOverlay');
+      if (open) {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+      } else {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+      }
+    }
+
+    // --- 8. STORE PICKUP WHATSAPP ORDER GENERATOR ---
+    function sendWhatsAppOrder() {
+      playClickSound(900);
+      if (cart.length === 0) {
+        alert("Your pickup list is empty! Please select items to pre-order.");
+        return;
+      }
+
+      let msg = "*STORE PICKUP PRE-ORDER - FOOD NEST DAVANAGERE*\n";
+      msg += "📍 Customer Takeaway Store Pickup at Davanagere\n";
+      msg += "--------------------------------------\n";
+
+      let total = 0;
+      cart.forEach((item, i) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        msg += `${i + 1}. *${item.title}* (${item.variant})\n`;
+        msg += `   Qty: ${item.qty} × ₹${item.price} = ₹${itemTotal}\n\n`;
+      });
+
+      msg += "--------------------------------------\n";
+      msg += `*TOTAL ESTIMATED PRICE: ₹${total}*\n\n`;
+      msg += "I will pick up this order directly at your Davanagere store counter. Please confirm estimated preparation time!";
+
+      const phone = "917975215163";
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // --- 9. FEEDBACK FORM HANDLER ---
+    function setupStarRating() {
+      const btns = document.querySelectorAll('#starRatingSelect .star-btn');
+      btns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          playClickSound(650);
+          btns.forEach(b => b.classList.remove('active'));
+          e.currentTarget.classList.add('active');
+          currentFeedbackRating = parseInt(e.currentTarget.dataset.rating);
+        });
+      });
+    }
+
+    function handleFeedbackSubmit(event) {
+      event.preventDefault();
+      playClickSound(900);
+
+      const name = document.getElementById('fbName').value.trim();
+      const comments = document.getElementById('fbComments').value.trim();
+
+      if (!name || !comments) return;
+
+      const starsText = '⭐'.repeat(currentFeedbackRating);
+
+      let msg = "*CUSTOMER FEEDBACK - FOOD NEST DAVANAGERE*\n";
+      msg += "--------------------------------------\n";
+      msg += `• *Name:* ${name}\n`;
+      msg += `• *Rating:* ${starsText} (${currentFeedbackRating} / 5 Stars)\n`;
+      msg += `• *Feedback:* ${comments}\n`;
+      msg += "--------------------------------------\n";
+      msg += "Sent via Food Nest Website";
+
+      const phone = "917975215163";
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+
+      if (window.confetti) {
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.8 }
+        });
+      }
+    }
+
+    // --- 10. FOOD DETAIL MODAL ---
+    let currentModalItem = null;
+    let modalSelectedVariant = null;
+    let modalQty = 1;
+
+    function openFoodModal(itemId) {
+      playClickSound(750);
+      const food = FOOD_DATABASE.find(f => f.id === itemId);
+      if (!food) return;
+
+      currentModalItem = food;
+      modalSelectedVariant = food.variants[0];
+      modalQty = 1;
+
+      document.getElementById('modalImg').src = food.image;
+      document.getElementById('modalCat').innerText = food.category;
+      document.getElementById('modalTitle').innerText = food.title;
+      document.getElementById('modalDesc').innerText = food.desc;
+      document.getElementById('modalPrice').innerText = `₹${modalSelectedVariant.price * modalQty}`;
+      document.getElementById('modalQtyVal').innerText = modalQty;
+
+      // Render Variants
+      const vContainer = document.getElementById('modalVariantSelector');
+      vContainer.innerHTML = food.variants.map((v, idx) => `
+        <button class="filter-btn ${idx === 0 ? 'active' : ''}" style="margin-right: 0.5rem; font-size: 0.75rem;" onclick="selectModalVariant(${idx})">
+          ${v.name} (₹${v.price})
+        </button>
+      `).join('');
+
+      document.getElementById('foodModal').classList.add('open');
+    }
+
+    function selectModalVariant(idx) {
+      playClickSound(650);
+      modalSelectedVariant = currentModalItem.variants[idx];
+
+      const btns = document.querySelectorAll('#modalVariantSelector .filter-btn');
+      btns.forEach((b, i) => {
+        if (i === idx) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+
+      document.getElementById('modalPrice').innerText = `₹${modalSelectedVariant.price * modalQty}`;
+    }
+
+    // --- 11. CUSTOM CURSOR & INITIALIZATION ---
+    function initCustomCursor() {
+      const cursor = document.getElementById('customCursor');
+      if (!cursor || window.innerWidth < 768) return;
+
+      window.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        cursor.classList.add('active');
+      });
+
+      document.querySelectorAll('a, button, .menu-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.classList.add('hover-link');
+          if (el.classList.contains('btn-add-item')) {
+            cursor.classList.add('hover-add');
+            cursor.innerText = 'PICKUP';
+          }
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.classList.remove('hover-link', 'hover-add');
+          cursor.innerText = '';
+        });
+      });
+    }
+
+    // GSAP Scroll Animations
+    function initScrollAnimations() {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Header Scroll Effect
+      ScrollTrigger.create({
+        start: 'top -50',
+        onUpdate: (self) => {
+          const header = document.getElementById('mainHeader');
+          if (self.direction === 1) header.classList.add('scrolled');
+          else if (self.scroll() < 50) header.classList.remove('scrolled');
+        }
+      });
+
+      // Section Numbering Progress Tracker
+      const sections = ['hero', 'the-nest', 'signature', 'menu', 'brand-message', 'local', 'feedback'];
+      sections.forEach(secId => {
+        ScrollTrigger.create({
+          trigger: `#${secId}`,
+          start: 'top 40%',
+          end: 'bottom 40%',
+          onEnter: () => updateStoryTracker(secId),
+          onEnterBack: () => updateStoryTracker(secId)
+        });
+      });
+
+      // Kinetic Typography Scroll Reveal
+      gsap.from('.kinetic-word', {
+        scrollTrigger: {
+          trigger: '.brand-message-section',
+          start: 'top 70%',
+          end: 'bottom 50%',
+          scrub: 1
+        },
+        opacity: 0.2,
+        y: 40,
+        stagger: 0.2
+      });
+    }
+
+    function updateStoryTracker(secId) {
+      document.querySelectorAll('.story-dot').forEach(dot => {
+        if (dot.dataset.sec === secId) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+    }
+
+    // Event Listeners Setup
+    document.addEventListener('DOMContentLoaded', () => {
+      initThreeHero();
+      renderMenu('ALL');
+      setupSignatureTabs();
+      setupStarRating();
+      initCustomCursor();
+      initScrollAnimations();
+
+      // Menu Category Filters
+      document.querySelectorAll('.menu-filter-bar .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          playClickSound(700);
+          document.querySelectorAll('.menu-filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          renderMenu(e.target.dataset.cat);
+        });
+      });
+
+      // Cart Controls
+      document.getElementById('openCartBtn').addEventListener('click', () => { playClickSound(750); toggleCart(true); });
+      document.getElementById('closeCartBtn').addEventListener('click', () => { playClickSound(600); toggleCart(false); });
+      document.getElementById('cartOverlay').addEventListener('click', () => toggleCart(false));
+      document.getElementById('whatsappOrderBtn').addEventListener('click', sendWhatsAppOrder);
+      document.getElementById('sigAddBtn').addEventListener('click', () => {
+        const item = FOOD_DATABASE[0];
+        quickAddToCart(item.id);
+      });
+
+      // Modal Controls
+      document.getElementById('closeModalBtn').addEventListener('click', () => {
+        playClickSound(600);
+        document.getElementById('foodModal').classList.remove('open');
+      });
+
+      document.getElementById('modalQtyMinus').addEventListener('click', () => {
+        if (modalQty > 1) {
+          playClickSound(600);
+          modalQty--;
+          document.getElementById('modalQtyVal').innerText = modalQty;
+          document.getElementById('modalPrice').innerText = `₹${modalSelectedVariant.price * modalQty}`;
+        }
+      });
+
+      document.getElementById('modalQtyPlus').addEventListener('click', () => {
+        playClickSound(600);
+        modalQty++;
+        document.getElementById('modalQtyVal').innerText = modalQty;
+        document.getElementById('modalPrice').innerText = `₹${modalSelectedVariant.price * modalQty}`;
+      });
+
+      document.getElementById('modalAddToCartBtn').addEventListener('click', () => {
+        if (currentModalItem && modalSelectedVariant) {
+          playClickSound(850);
+          const existingIndex = cart.findIndex(c => c.id === currentModalItem.id && c.variant === modalSelectedVariant.name);
+          if (existingIndex > -1) {
+            cart[existingIndex].qty += modalQty;
+          } else {
+            cart.push({
+              id: currentModalItem.id,
+              title: currentModalItem.title,
+              price: modalSelectedVariant.price,
+              variant: modalSelectedVariant.name,
+              image: currentModalItem.image,
+              qty: modalQty
+            });
+          }
+          updateCartUI();
+          document.getElementById('foodModal').classList.remove('open');
+          toggleCart(true);
+        }
+      });
+
+      // BGM Music Button Toggle
+      const audioBtn = document.getElementById('audioToggleBtn');
+
+      function startBGMWithUI() {
+        bgm.start();
+        audioBtn.classList.add('playing');
+        audioBtn.innerHTML = '<i data-lucide="volume-2"></i>';
+        if (window.lucide) lucide.createIcons();
+      }
+
+      audioBtn.addEventListener('click', () => {
+        if (bgm.isPlaying) {
+          bgm.stop();
+          audioBtn.classList.remove('playing');
+          audioBtn.innerHTML = '<i data-lucide="volume-x"></i>';
+          bgmAutoStarted = true; // user turned off — don't re-trigger automatically
+        } else {
+          startBGMWithUI();
+          bgmAutoStarted = true;
+        }
+        if (window.lucide) lucide.createIcons();
+      });
+
+      // ---- AUTO-PLAY ON FIRST ANY INTERACTION (scroll / wheel / touch / click / key) ----
+      // Strategy: register listeners on BOTH window AND document to catch all scroll paths.
+      // We init the AudioContext eagerly (silent), then resume() it inside the handler
+      // with a Promise chain so it works even when the browser suspends on scroll.
+      bgm.init(); // pre-init AudioContext silently so resume() is instant on interaction
+
+      const BGM_EVENTS = [
+        [window,   'wheel',      { passive: true }],
+        [window,   'keydown',    {}],
+        [document, 'scroll',     { passive: true }],
+        [document, 'touchstart', { passive: true }],
+        [document, 'touchmove',  { passive: true }],
+        [document, 'click',      {}],
+        [document, 'mousedown',  {}],
+      ];
+
+      function handleFirstInteraction() {
+        if (bgmAutoStarted) return;
+        bgmAutoStarted = true;
+
+        // Remove all listeners immediately to prevent double-trigger
+        BGM_EVENTS.forEach(([target, ev, opts]) => {
+          target.removeEventListener(ev, handleFirstInteraction, opts);
+        });
+
+        // Resume context (may be suspended) then start BGM
+        const ctx = bgm.ctx;
+        if (ctx && ctx.state === 'suspended') {
+          ctx.resume().then(() => startBGMWithUI()).catch(() => startBGMWithUI());
+        } else {
+          startBGMWithUI();
+        }
+      }
+
+      BGM_EVENTS.forEach(([target, ev, opts]) => {
+        target.addEventListener(ev, handleFirstInteraction, opts);
+      });
+    });
+  </script>
+</body>
+</html>
